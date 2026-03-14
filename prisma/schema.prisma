@@ -9,20 +9,120 @@ generator client {
   output   = "../src/generated/prisma"
 }
 
+
 datasource db {
   provider = "postgresql"
 }
 
+enum Role {
+  CUSTOMER
+  PROVIDER
+  ADMIN
+}
+
+enum OrderStatus {
+  PLACED
+  PREPARING
+  READY
+  DELIVERED
+  CANCELLED
+}
+
+model OrderItem {
+  id String @id @default(cuid())
+
+  orderId String
+  mealId  String
+
+  quantity Int
+  price    Float
+  
+
+
+  order Order @relation(fields: [orderId], references: [id])
+  meal  Meal  @relation(fields: [mealId], references: [id])
+}
+
+model Review {
+  id String @id @default(cuid())
+
+  userId String
+  mealId String
+
+  rating  Int
+  comment String?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+  meal Meal @relation(fields: [mealId], references: [id])
+}
+
+model Order {
+  id     String      @id @default(cuid())
+  userId String
+  status OrderStatus @default(PLACED)
+
+  totalPrice Float
+  address    String
+
+  createdAt DateTime @default(now())
+
+  user  User        @relation(fields: [userId], references: [id])
+  items OrderItem[]
+}
+
+model Meal {
+  id          String  @id @default(cuid())
+  name        String
+  description String?
+  price       Float
+  image       String?
+
+  providerId String
+  categoryId String
+
+  provider ProviderProfile @relation(fields: [providerId], references: [id])
+  category Category        @relation(fields: [categoryId], references: [id])
+
+  orderItems OrderItem[]
+  reviews    Review[]
+}
+
+model ProviderProfile {
+  id     String @id @default(cuid())
+  userId String @unique
+
+  restaurantName String
+  description    String?
+  address        String
+  phone          String
+
+  user  User   @relation(fields: [userId], references: [id])
+  meals Meal[]
+}
+
+model Category {
+  id   String @id @default(cuid())
+  name String @unique
+
+  meals Meal[]
+}
+
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
+  id            String   @id @default(cuid()) // Prisma primary key   
+  name            String  // stores Better Auth ID
+  email           String
+  emailVerified   Boolean          @default(false)
+  image           String?
+  role            Role             @default(CUSTOMER)
+  createdAt       DateTime         @default(now())
+  updatedAt       DateTime         @updatedAt
+  sessions        Session[]
+  accounts        Account[]
+  reviews         Review[]
+  orders          Order[]
+  providerProfile ProviderProfile?
 
   @@unique([email])
   @@map("user")

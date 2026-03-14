@@ -10,3 +10,6 @@ export const auth = betterAuth({
     enabled: true,
   },
 });
+
+// set the user into global 
+
