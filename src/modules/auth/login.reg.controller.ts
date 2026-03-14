@@ -7,7 +7,6 @@ const registerController = async (req: Request, res: Response) => {
     const { name, email, password, image } = req.body; // take data form client
     // validation input exist or not
     if (!name || !email || !password || image) {
-
       return res
         .status(400)
         .json({ success: false, error: "All fields are required" });
@@ -17,6 +16,7 @@ const registerController = async (req: Request, res: Response) => {
       body: { name, email, password, image },
       headers: { cookies: req.headers.cookie as string | undefined },
     });
+    // check user is exist or not
     const existingUser = await prisma.user.findUnique({
       where: { email: data.user.email },
     });
@@ -31,7 +31,7 @@ const registerController = async (req: Request, res: Response) => {
         },
       });
     }
-    console.log("registration --> ", data.user);
+
     // response to client side
     return res.status(201).json({ success: true, user: data.user });
   } catch (error: any) {

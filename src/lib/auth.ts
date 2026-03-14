@@ -1,6 +1,8 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
+import { User } from "../generated/prisma/client";
+
 export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
@@ -11,5 +13,12 @@ export const auth = betterAuth({
   },
 });
 
-// set the user into global 
+// set user to global for TS
 
+declare global {
+  namespace Express {
+    interface Request {
+      user?: User;
+    }
+  }
+}
