@@ -5,17 +5,18 @@ import { auth } from "./lib/auth";
 import routes from "./Router";
 
 const app = express();
-
+// authentication url from better auth..
+app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(
   cors({
     origin: process.env.FRONTEND_URL, //frontend URL
     credentials: true,
   }),
 );
-
-// authentication url from better auth..
-app.all("/api/auth/*splat", toNodeHandler(auth));
 app.use(express.json());
+
+
+
 
 //  all routes -->
 app.use(routes);

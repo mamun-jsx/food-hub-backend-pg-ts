@@ -3,16 +3,23 @@ import { prisma } from "../../lib/prisma";
 
 const getAllUser = async (req: Request, res: Response) => {
   try {
+    if (!req.user) {
+      return res
+        .status(401)
+        .json({ success: false, message: "You are not login" });
+    }
     const users = await prisma.user.findMany();
 
-    return res.status(200).json({ success: true, users });
+    return res.status(200).json({
+      success: true,
+      data: users,
+    });
   } catch (error: any) {
-    console.error("Error in setUser middleware:", error);
+    console.error("Error fetching users:", error);
 
-    // Manual error handling: send response directly
     return res.status(500).json({
       success: false,
-      message: "Internal Server Error in setUser middleware",
+      message: "Internal Server Error",
       details: error.message || error,
     });
   }

@@ -1,68 +1,60 @@
-import { Request, Response, NextFunction } from "express";
+import { Request, Response } from "express";
 import { auth } from "../../lib/auth";
-import { prisma } from "../../lib/prisma";
 
+
+// ============================| SIGN-UP |==========================================
 const registerController = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, image } = req.body; // take data form client
-    // validation input exist or not
-    if (!name || !email || !password || image) {
-      return res
-        .status(400)
-        .json({ success: false, error: "All fields are required" });
-    }
-    // call Better Auth signUP functions
+    const { name, email, password, image } = req.body;
+
     const data = await auth.api.signUpEmail({
       body: { name, email, password, image },
-      headers: { cookies: req.headers.cookie as string | undefined },
-    });
-    // check user is exist or not
-    const existingUser = await prisma.user.findUnique({
-      where: { email: data.user.email },
+      headers: req.headers as any,
     });
 
-    // store the data by prisma into Postgres if user is not exist..
-    if (!existingUser) {
-      await prisma.user.create({
-        data: {
-          name: data.user.name,
-          email: data.user.email,
-          role: "CUSTOMER",
-        },
-      });
-    }
-
-    // response to client side
-    return res.status(201).json({ success: true, user: data.user });
+    return res.status(201).json({
+      success: true,
+      data,
+    });
   } catch (error: any) {
-    console.error(error);
-    return res.status(500).json({
+    const status =
+      typeof error.statusCode === "number" ? error.statusCode : 500;
+    return res.status(status).json({
       success: false,
       message: error.message || "Registration failed",
     });
   }
 };
 
+// ============================|LOGIN |==========================================
 const signInController = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body; // take data from input
-    //    check
-    if (!email || !password) {
-      return res
-        .status(400)
-        .json({ success: false, error: "Email and password are required" });
-    }
-    // call better Auth function
+    const { email, password } = req.body;
+
+    // Use 'asResponse: true' to get the full response object including headers
     const data = await auth.api.signInEmail({
       body: { email, password, rememberMe: true },
-      headers: { cookie: req.headers.cookie as string | undefined },
+      headers: req.headers as any,
+      asResponse: true,
     });
 
-    // send response to client
-    return res.status(200).json({ success: true, data });
+    // 1. Manually extract the 'Set-Cookie' header
+    const setCookie = data.headers.get("set-cookie");
+
+    if (setCookie) {
+      // 2. Set it on your Express response
+      res.setHeader("Set-Cookie", setCookie);
+    }
+
+    // 3. Convert the Better Auth response to JSON to send back to client
+    const user = await data.json();
+
+    return res.status(200).json({
+      success: true,
+      user,
+    });
   } catch (error: any) {
-    console.error(error);
-    return res.status(500).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
       message: error.message || "Login failed",
     });
