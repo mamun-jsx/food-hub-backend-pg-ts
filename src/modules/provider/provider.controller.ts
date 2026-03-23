@@ -60,6 +60,7 @@ const createProviderProfile = async (req: Request, res: Response) => {
     });
   }
 };
+// create a meal..
 const addMeals = async (req: Request, res: Response) => {
   try {
     const { name, description, price, image, category } = req.body;
@@ -115,24 +116,53 @@ const addMeals = async (req: Request, res: Response) => {
 // update a meal
 const updateMeal = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const id = req.params.id as string;
     console.log(id);
-    res
-      .status(200)
-      .json({ success: true, message: "Data Update Successfully" });
+    const { name, description, price, image, category } = req.body;
+    const updateMeal = await prisma.meal.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        description,
+        price,
+        image,
+        category,
+      },
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Data Update Successfully",
+      updateMeal,
+    });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 };
+
 const deleteMeals = async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
-    console.log(id);
-    res
-      .status(200)
-      .json({ success: true, message: "Data Deleted Successfully" });
+    const id = req.params.id as string;
+
+    const deleteMeal = await prisma.meal.delete({
+      where: { id },
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Data Deleted Successfully",
+      data: deleteMeal,
+    });
   } catch (error) {
-    console.log(error);
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 };
 

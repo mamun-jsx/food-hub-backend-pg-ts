@@ -4,9 +4,10 @@ import { prisma } from "../../lib/prisma";
 const getAllMeal = async (req: Request, res: Response) => {
   try {
     const meals = await prisma.meal.findMany();
-
+    const numberOfItems = meals.length;
     return res.status(200).json({
       success: true,
+      numberOfItems,
       meal: meals,
     });
   } catch (error) {

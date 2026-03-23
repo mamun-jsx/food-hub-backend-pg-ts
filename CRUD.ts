@@ -22,9 +22,9 @@
 
 //// POST /api/provider/meals → add meal //* DONE ✅
 
-// PUT /api/provider/meals/:id → update meal
+//// PUT /api/provider/meals/:id → update meal //* DONE ✅
 
-// DELETE /api/provider/meals/:id → delete meal
+//// DELETE /api/provider/meals/:id → delete meal //* DONE ✅
 
 // PATCH /api/provider/orders/:id → update order status
 

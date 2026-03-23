@@ -19,6 +19,8 @@ const PROVIDER__API = {
   POST: {
     url_FOR_Profile_create: "http://localhost:4001/api/provider/profile",
     url_for_Add_Meal: "http://localhost:4001/api/provider/meals",
+    url_for_update_Meal: "http://localhost:4001/api/provider/meals/:id",
+    url_for_delete_Meal: "http://localhost:4001/api/provider/meals/:id",
   },
 };
 // ==========================| Customer | =========================
@@ -33,6 +35,7 @@ const CUSTOMER__API = {
     all_provider: "http://localhost:4001/api/providers",
     all_provider_with_Menu_By_Provider_id:
       "http://localhost:4001/api/providers/:id",
+    // http://localhost:4001/api/providers/cmn32hsti0000mjzuttwt7qk7
   },
 };
 // ==========================| ADMIN API | ===========================
