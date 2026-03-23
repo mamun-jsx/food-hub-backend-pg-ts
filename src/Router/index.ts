@@ -5,6 +5,7 @@ import { setUser } from "../middlewear/setUser";
 import providerRoute from "../modules/provider/provider.route";
 import { requireRoles } from "../middlewear/requireRoles";
 import { Role } from "../lib/constants";
+import customerRoute from "../modules/customer/customer.route";
 
 const routes = Router();
 // test route
@@ -22,5 +23,6 @@ routes.use(setUser);
 routes.use("/api/admin", requireRoles([Role.ADMIN]), adminRoute);
 
 routes.use("/api/provider", requireRoles([Role.PROVIDER]), providerRoute);
-
+// ------------ Customer route ------------
+routes.use("/api", customerRoute);
 export default routes;

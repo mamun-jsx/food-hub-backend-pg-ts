@@ -6,6 +6,7 @@ const providerRoute = Router();
 providerRoute.post("/meals", providerApi.addMeals);
 providerRoute.put("/meals/:id", providerApi.updateMeal);
 providerRoute.delete("/meals/:id", providerApi.deleteMeals);
+providerRoute.post("/profile", providerApi.createProviderProfile);
 
 export default providerRoute;
 
@@ -15,5 +16,6 @@ export default providerRoute;
 }
 
 // http://localhost:4001/api/provider/meals /Post a meal
+// http://localhost:4001/api/provider/profile /Post a meal
 // http://localhost:4001/api/provider/meals/:id /Update a meal
 // http://localhost:4001/api/provider/meals/:id /Delete a meal

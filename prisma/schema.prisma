@@ -71,10 +71,9 @@ model Meal {
   image       String?
 
   providerId String
-  categoryId String
+  category   String
 
   provider ProviderProfile @relation(fields: [providerId], references: [id])
-  category Category        @relation(fields: [categoryId], references: [id])
 
   orderItems OrderItem[]
   reviews    Review[]
@@ -93,12 +92,6 @@ model ProviderProfile {
   meals Meal[]
 }
 
-model Category {
-  id   String @id @default(cuid())
-  name String @unique
-
-  meals Meal[]
-}
 
 model User {
   id              String           @id @default(cuid()) // Prisma primary key   

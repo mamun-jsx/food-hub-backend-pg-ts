@@ -1,12 +1,12 @@
 // ! Public APIs
 
-// GET /api/meals → list all meals
+//// GET /api/meals → list all meals //* DONE ✅
 
-// GET /api/meals/:id → meal details
+//// GET /api/meals/:id → meal details //* DONE ✅
 
-// GET /api/providers → list providers
+//// GET /api/providers → list providers //* DONE ✅
 
-// GET /api/providers/:id → provider menu
+//// GET /api/providers/:id → provider menu //* DONE ✅
 
 //! Customer APIs
 
@@ -20,7 +20,7 @@
 
 // ! Provider APIs
 
-// POST /api/provider/meals → add meal
+//// POST /api/provider/meals → add meal //* DONE ✅
 
 // PUT /api/provider/meals/:id → update meal
 
@@ -30,8 +30,8 @@
 
 //! Admin APIs
 
-//// GET /api/admin/users → list all users //* DONE ✅ 
+//// GET /api/admin/users → list all users //* DONE ✅
 
-// PATCH /api/admin/users/:id → update role/status
+//// PATCH /api/admin/users/:id → update role/status //*DONE ✅
 
 // GET /api/admin/orders → view all orders
