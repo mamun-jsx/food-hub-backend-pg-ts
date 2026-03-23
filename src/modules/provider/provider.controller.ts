@@ -165,10 +165,37 @@ const deleteMeals = async (req: Request, res: Response) => {
     });
   }
 };
-
+// update order status
+const updateOrderStatus = async (req: Request, res: Response) => {
+  try {
+    const orderId = req.params.id as string;
+    
+    const { status } = req.body;
+    const updateStatus = await prisma.order.update({
+      where: {
+        id: orderId,
+      },
+      data: {
+        status: status,
+      },
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Order status updated successfully",
+      data: updateStatus,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
 export const providerApi = {
   addMeals,
   updateMeal,
   deleteMeals,
   createProviderProfile,
+  updateOrderStatus,
 };

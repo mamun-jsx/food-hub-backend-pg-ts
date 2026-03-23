@@ -22,6 +22,9 @@ const PROVIDER__API = {
     url_for_update_Meal: "http://localhost:4001/api/provider/meals/:id",
     url_for_delete_Meal: "http://localhost:4001/api/provider/meals/:id",
   },
+  PATCH: {
+    url_for_Update_Status: "http://localhost:4001/api/provider/orders/:id", //order id
+  },
 };
 // ==========================| Customer | =========================
 const CUSTOMER__API = {
@@ -36,6 +39,13 @@ const CUSTOMER__API = {
     all_provider_with_Menu_By_Provider_id:
       "http://localhost:4001/api/providers/:id",
     // http://localhost:4001/api/providers/cmn32hsti0000mjzuttwt7qk7
+    get_All_orders: "http://localhost:4001/api/orders",
+    get_orders_details: "http://localhost:4001/api/orders/:id",
+  },
+
+  POST: {
+    PLACE_ORDER: "http://localhost:4001/api/orders",
+    // take form data as req.body { userId, status, totalPrice, address } = req.body;
   },
 };
 // ==========================| ADMIN API | ===========================
@@ -44,9 +54,10 @@ const admin___API = {
     email: "admin@gmail.com",
     password: "12345678",
   },
-  Get_All_User: {
+  ADMIN_GET: {
     method: "GET",
-    url: "http://localhost:4001/api/v1/users",
+    GET_ALL_USERS: "http://localhost:4001/api/v1/users",
+    Get_ALL_ORDERS: "http://localhost:4001/api/admin/orders",
   },
   update_A_User_ROLE: {
     method: "PATCH",

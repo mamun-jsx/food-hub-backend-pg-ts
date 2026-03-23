@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { prisma } from "../../lib/prisma";
-
+// get all user
 const getAllUser = async (req: Request, res: Response) => {
   try {
     if (!req.user) {
@@ -24,6 +24,7 @@ const getAllUser = async (req: Request, res: Response) => {
     });
   }
 };
+// update user
 const updateUser = async (req: Request, res: Response) => {
   try {
     const userId = req.params.id as string;
@@ -32,7 +33,7 @@ const updateUser = async (req: Request, res: Response) => {
       where: { id: userId },
       data: { role },
     });
-    
+
     res.status(200).json({ success: true, user: updateUser });
   } catch (error: any) {
     if (error.code === "P2025") {
@@ -48,7 +49,35 @@ const updateUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+//  view all order
+const adminOrderView = async (req: Request, res: Response) => {
+  try {
+    const orderData = await prisma.order.findMany({
+      include: {
+        items: {
+          include: {
+            meal: true,
+          },
+        },
+      },
+    });
+    if (orderData.length === 0) {
+      return res
+        .status(404)
+        .json({ success: true, message: "No order placed yet" });
+    }
+    return res.status(200).json({ success: true, data: orderData });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
+
 export const adminApis = {
   getAllUser,
   updateUser,
+  adminOrderView,
 };
