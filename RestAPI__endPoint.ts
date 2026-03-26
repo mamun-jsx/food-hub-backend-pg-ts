@@ -9,6 +9,10 @@ const LoginRegistrationAPI = {
     method: "POST",
     url: "http://localhost:4001/api/v1/sign-in/email",
   },
+  LogOut: {
+    method: "POST",
+    url: "http://localhost:4001/api/v1/sign-out",
+  },
 };
 // =========================| Provider | =====================
 const PROVIDER__API = {

@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { auth } from "../../lib/auth";
 
-
 // ============================| SIGN-UP |==========================================
 const registerController = async (req: Request, res: Response) => {
   try {
@@ -61,7 +60,23 @@ const signInController = async (req: Request, res: Response) => {
   }
 };
 
+const louOut = async (req: Request, res: Response) => {
+  try {
+    await auth.api.signOut({
+      headers: req.headers as any,
+    });
+    return res
+      .status(200)
+      .json({ success: true, message: "Logged out successfully" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Internal Server Error" });
+  }
+};
 export const LoginRegistrationFunction = {
   signInController,
   registerController,
+  louOut,
 };
