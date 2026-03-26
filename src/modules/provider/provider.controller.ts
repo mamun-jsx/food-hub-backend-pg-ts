@@ -144,7 +144,7 @@ const updateMeal = async (req: Request, res: Response) => {
     });
   }
 };
-
+// delete a meal 
 const deleteMeals = async (req: Request, res: Response) => {
   try {
     const id = req.params.id as string;
@@ -169,7 +169,7 @@ const deleteMeals = async (req: Request, res: Response) => {
 const updateOrderStatus = async (req: Request, res: Response) => {
   try {
     const orderId = req.params.id as string;
-    
+
     const { status } = req.body;
     const updateStatus = await prisma.order.update({
       where: {

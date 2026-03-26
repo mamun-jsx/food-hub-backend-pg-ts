@@ -19,11 +19,16 @@ const PROVIDER__API = {
   POST: {
     url_FOR_Profile_create: "http://localhost:4001/api/provider/profile",
     url_for_Add_Meal: "http://localhost:4001/api/provider/meals",
+  },
+
+  PUT: {
     url_for_update_Meal: "http://localhost:4001/api/provider/meals/:id",
-    url_for_delete_Meal: "http://localhost:4001/api/provider/meals/:id",
   },
   PATCH: {
     url_for_Update_Status: "http://localhost:4001/api/provider/orders/:id", //order id
+  },
+  DELETE: {
+    url_for_delete_Meal: "http://localhost:4001/api/provider/meals/:id",
   },
 };
 // ==========================| Customer | =========================
@@ -46,6 +51,8 @@ const CUSTOMER__API = {
   POST: {
     PLACE_ORDER: "http://localhost:4001/api/orders",
     // take form data as req.body { userId, status, totalPrice, address } = req.body;
+    POST_REview: "http://localhost:4001/api/reviews",
+    //const { userId, mealId, rating, comment } = req.body;
   },
 };
 // ==========================| ADMIN API | ===========================

@@ -3,7 +3,23 @@ import { prisma } from "../../lib/prisma";
 // get all meal
 const getAllMeal = async (req: Request, res: Response) => {
   try {
-    const meals = await prisma.meal.findMany();
+    const meals = await prisma.meal.findMany({
+      include: {
+        reviews: {
+          select: {
+            rating: true,
+            comment: true,
+            createdAt: true,
+            user: {
+              select: {
+                name: true,
+                image: true,
+              },
+            },
+          },
+        },
+      },
+    });
     const numberOfItems = meals.length;
     return res.status(200).json({
       success: true,
@@ -23,7 +39,25 @@ const getAllMeal = async (req: Request, res: Response) => {
 const getMealById = async (req: Request, res: Response) => {
   try {
     const mealId = req.params.id as string;
-    const meal = await prisma.meal.findUnique({ where: { id: mealId } });
+    const meal = await prisma.meal.findUnique({
+      where: { id: mealId },
+      include: {
+        reviews: {
+          select: {
+            rating: true,
+            comment: true,
+            createdAt: true,
+            user: {
+              select: {
+                name: true,
+                image: true,
+              },
+            },
+          },
+        },
+      },
+    });
+
     res.status(200).json({ success: true, data: meal });
   } catch (error) {
     return res.status(500).json({
@@ -181,6 +215,67 @@ const orderDetails = async (req: Request, res: Response) => {
   }
 };
 
+// ! review route
+
+const createReview = async (req: Request, res: Response) => {
+  try {
+    const { userId, mealId, rating, comment } = req.body;
+
+    // validation
+    if (!userId || !mealId || !rating) {
+      return res.status(400).json({
+        success: false,
+        message: "user id , mealId, ratting are required",
+      });
+    }
+    // check review ratting
+    if (rating < 1 || rating > 5) {
+      return res
+        .status(400)
+        .json({ success: false, message: "Rating must be between 1 and 5" });
+    }
+    // check user is exist
+    const user = await prisma.user.findUnique({ where: { id: userId } });
+    const meal = await prisma.meal.findUnique({ where: { id: mealId } });
+    if (!user || !meal) {
+      return res.status(404).json({
+        success: false,
+        message: "User or Meal not found",
+      });
+    }
+    // check duplicate review
+    const existingReview = await prisma.review.findFirst({
+      where: { userId, mealId },
+    });
+    // block if review exist
+    if (existingReview) {
+      return res
+        .status(400)
+        .json({ success: false, message: "You already reviewed this meal" });
+    }
+    // create review into database..
+    const reviewData = await prisma.review.create({
+      data: {
+        userId,
+        mealId,
+        rating,
+        comment,
+      },
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Review Created Successfully",
+      reviewData,
+    });
+  } catch (error) {
+    console.error("Error creating review:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Review failed",
+    });
+  }
+};
+
 export const customerAPis = {
   getAllMeal,
   getMealById,
@@ -189,4 +284,5 @@ export const customerAPis = {
   placeOrder,
   getAllOrder,
   orderDetails,
+  createReview,
 };
