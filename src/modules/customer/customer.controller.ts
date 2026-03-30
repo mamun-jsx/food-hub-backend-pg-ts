@@ -69,7 +69,17 @@ const getMealById = async (req: Request, res: Response) => {
 // get all provider
 const getProviders = async (req: Request, res: Response) => {
   try {
-    const provider = await prisma.providerProfile.findMany();
+    const provider = await prisma.providerProfile.findMany({
+      include: {
+        user: {
+          select: {
+            name: true,
+            email: true,
+            image: true,
+          },
+        },
+      },
+    });
     if (provider.length === 0) {
       return res.status(404).json({
         success: true,
@@ -214,7 +224,33 @@ const orderDetails = async (req: Request, res: Response) => {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 };
+// get a single user by profile...
+const getProviderById = async (req: Request, res: Response) => {
+  try {
+    const userId = req.params.id as string;
 
+    const result = await prisma.providerProfile.findUnique({
+      where: { id: userId },
+    });
+
+    if (!result) {
+      return res.status(404).json({
+        success: false,
+        message: "User not found",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      profile: result,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
 // ! review route
 
 const createReview = async (req: Request, res: Response) => {
@@ -285,4 +321,5 @@ export const customerAPis = {
   getAllOrder,
   orderDetails,
   createReview,
+  getProviderById,
 };

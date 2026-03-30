@@ -15,8 +15,8 @@ routes.get("/", (req, res) => {
 
 // ____________login route _____________
 
-routes.use("/api/v1", loginRoute);
-
+routes.use( loginRoute);
+routes.use("/api", customerRoute);
 routes.use(setUser);
 // ___________ Admin route _____________
 
@@ -24,5 +24,5 @@ routes.use("/api/admin", requireRoles([Role.ADMIN]), adminRoute);
 
 routes.use("/api/provider", requireRoles([Role.PROVIDER]), providerRoute);
 // ------------ Customer route ------------
-routes.use("/api", customerRoute);
+
 export default routes;

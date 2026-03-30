@@ -3,15 +3,15 @@
 const LoginRegistrationAPI = {
   Registration: {
     method: "POST",
-    url: "http://localhost:4001/api/v1/sign-up/email",
+    url: "http://localhost:4001/api/auth/sign-up/email",
   },
   Login: {
     method: "POST",
-    url: "http://localhost:4001/api/v1/sign-in/email",
+    url: "http://localhost:4001/api/auth/sign-in/email", // !TODO 
   },
   LogOut: {
     method: "POST",
-    url: "http://localhost:4001/api/v1/sign-out",
+    url: "http://localhost:4001/api/v1/sign-out", // ! DONE
   },
 };
 // =========================| Provider | =====================
@@ -42,14 +42,15 @@ const CUSTOMER__API = {
     password: "12345678",
   },
   GET: {
-    All_MEALS: "http://localhost:4001/api/meals",
-    MEAL_by_ID: "http://localhost:4001/api/meals/:id",
-    all_provider: "http://localhost:4001/api/providers",
+    All_MEALS: "http://localhost:4001/api/meals", //! DONE
+    MEAL_by_ID: "http://localhost:4001/api/meals/:id", //! DONE
+    all_provider: "http://localhost:4001/api/providers", //! DONE
     all_provider_with_Menu_By_Provider_id:
-      "http://localhost:4001/api/providers/:id",
+      "http://localhost:4001/api/providers/:id", //!DONE
     // http://localhost:4001/api/providers/cmn32hsti0000mjzuttwt7qk7
     get_All_orders: "http://localhost:4001/api/orders",
     get_orders_details: "http://localhost:4001/api/orders/:id",
+    get_A_Provider: "http://localhost:4001/api/get-provider/:id", //! DONE
   },
 
   POST: {
@@ -60,18 +61,20 @@ const CUSTOMER__API = {
   },
 };
 // ==========================| ADMIN API | ===========================
+// TODO
 const admin___API = {
   adminLogin: {
     email: "admin@gmail.com",
     password: "12345678",
   },
+  
   ADMIN_GET: {
     method: "GET",
-    GET_ALL_USERS: "http://localhost:4001/api/v1/users",
-    Get_ALL_ORDERS: "http://localhost:4001/api/admin/orders",
+    GET_ALL_USERS: "http://localhost:4001/api/admin/users", //TODO 
+    Get_ALL_ORDERS: "http://localhost:4001/api/admin/orders", //TODO 
   },
   update_A_User_ROLE: {
     method: "PATCH",
-    url: "http://localhost:4001/api/admin/users/:id",
+    url: "http://localhost:4001/api/admin/users/:id", //TODO 
   },
 };
