@@ -51,6 +51,7 @@ const getMealById = async (req: Request, res: Response) => {
               select: {
                 name: true,
                 image: true,
+                id: true,
               },
             },
           },
@@ -233,7 +234,7 @@ const orderDetails = async (req: Request, res: Response) => {
 export const getMyOrders = async (req: Request, res: Response) => {
   try {
     //  get user from auth session (NOT params)
-    const userId = req.user?.id; 
+    const userId = req.user?.id;
 
     if (!userId) {
       return res.status(401).json({
@@ -349,7 +350,7 @@ const createReview = async (req: Request, res: Response) => {
     });
   }
 };
-// update user profile 
+// update user profile
 export const updateUserProfile = async (req: Request, res: Response) => {
   try {
     if (!req.user) {
