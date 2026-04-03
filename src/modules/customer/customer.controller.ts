@@ -131,23 +131,28 @@ const getProviderWithMenu = async (req: Request, res: Response) => {
 // place order
 const placeOrder = async (req: Request, res: Response) => {
   try {
-    const { userId, totalPrice, address, items } = req.body;
+    const { userId, address, items } = req.body;
 
+    // 1. Calculate Total Price on the server for safety
+    const totalPrice = items.reduce(
+      (acc: number, item: any) => acc + item.price * item.quantity,
+      0,
+    );
+
+    // 2. Create Order and OrderItems in one go
     const result = await prisma.order.create({
       data: {
         userId,
         totalPrice,
         address,
-        // This creates the OrderItems and links them to this Order automatically
         items: {
           create: items.map((item: any) => ({
-            mealId: item.mealId,
+            mealId: item.id, // Mapping your cart "id" to "mealId"
             quantity: item.quantity,
             price: item.price,
           })),
         },
       },
-      // Include the items in the response so the user sees what they bought
       include: {
         items: true,
       },
@@ -159,8 +164,8 @@ const placeOrder = async (req: Request, res: Response) => {
       data: result,
     });
   } catch (error) {
-    console.error("Error placing order:", error);
-    return res.status(500).json({ success: false, message: "Server error" });
+    console.error(error);
+    return res.status(500).json({ success: false, message: "Order failed" });
   }
 };
 
@@ -222,6 +227,39 @@ const orderDetails = async (req: Request, res: Response) => {
   } catch (error) {
     console.error("Error fetching orders:", error);
     return res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+// get users orders
+export const getMyOrders = async (req: Request, res: Response) => {
+  try {
+    //  get user from auth session (NOT params)
+    const userId = req.user?.id; 
+
+    if (!userId) {
+      return res.status(401).json({
+        success: false,
+        message: "Unauthorized",
+      });
+    }
+
+    const orders = await prisma.order.findMany({
+      where: {
+        userId: userId, // ✅ SAFE
+      },
+      include: {
+        items: true,
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: orders,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
   }
 };
 // get a single user by profile...
@@ -311,7 +349,47 @@ const createReview = async (req: Request, res: Response) => {
     });
   }
 };
+// update user profile 
+export const updateUserProfile = async (req: Request, res: Response) => {
+  try {
+    if (!req.user) {
+      return res.status(401).json({
+        success: false,
+        message: "You are not logged in",
+      });
+    }
+    const userId = req.user.id; // from auth middleware
 
+    const { name, image } = req.body;
+
+    // validation (only allow name & image)
+    if (!name && !image) {
+      return res.status(400).json({
+        success: false,
+        message: "Name or image is required",
+      });
+    }
+
+    const updatedUser = await prisma.user.update({
+      where: { id: userId },
+      data: {
+        ...(name && { name }),
+        ...(image && { image }),
+      },
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: updatedUser,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Server error",
+    });
+  }
+};
 export const customerAPis = {
   getAllMeal,
   getMealById,
@@ -322,4 +400,6 @@ export const customerAPis = {
   orderDetails,
   createReview,
   getProviderById,
+  getMyOrders,
+  updateUserProfile,
 };
