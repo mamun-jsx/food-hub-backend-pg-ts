@@ -1,9 +1,65 @@
 import { Request, Response } from "express";
 import { prisma } from "../../lib/prisma";
 // get all meal
+// const getAllMeal = async (req: Request, res: Response) => {
+//   try {
+//     const meals = await prisma.meal.findMany({
+//       include: {
+//         reviews: {
+//           select: {
+//             rating: true,
+//             comment: true,
+//             createdAt: true,
+//             user: {
+//               select: {
+//                 name: true,
+//                 image: true,
+//               },
+//             },
+//           },
+//         },
+//       },
+//     });
+//     const numberOfItems = meals.length;
+//     return res.status(200).json({
+//       success: true,
+//       numberOfItems,
+//       meal: meals,
+//     });
+//   } catch (error) {
+//     console.error("Error fetching meals:", error);
+
+//     return res.status(500).json({
+//       success: false,
+//       message: "Server error",
+//     });
+//   }
+// };
 const getAllMeal = async (req: Request, res: Response) => {
   try {
+    const { search, category } = req.query;
+
     const meals = await prisma.meal.findMany({
+      where: {
+        AND: [
+          search
+            ? {
+                name: {
+                  contains: search as string,
+                  mode: "insensitive",
+                },
+              }
+            : {},
+          category
+            ? {
+                category: {
+                  equals: category as string,
+                  mode: "insensitive",
+                },
+              }
+            : {},
+        ],
+      },
       include: {
         reviews: {
           select: {
@@ -20,10 +76,10 @@ const getAllMeal = async (req: Request, res: Response) => {
         },
       },
     });
-    const numberOfItems = meals.length;
+
     return res.status(200).json({
       success: true,
-      numberOfItems,
+      numberOfItems: meals.length,
       meal: meals,
     });
   } catch (error) {

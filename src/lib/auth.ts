@@ -1,4 +1,3 @@
-
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma";
@@ -13,7 +12,7 @@ export const auth = betterAuth({
     additionalFields: {
       role: {
         type: "string",
-        defaultValue: "customer", // Default for new sign-ups
+        defaultValue: "CUSTOMER", // Default for new sign-ups - MUST match Prisma schema
         input: false, // Prevents users from manually setting their role during sign-up
       },
     },
