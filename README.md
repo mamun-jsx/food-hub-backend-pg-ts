@@ -2,6 +2,9 @@
 
 Food Hub is a scalable backend system for a multi-vendor food ordering platform where users can browse food, filter by category, view provider/restaurant-wise meals, place orders, and leave reviews after delivery. Admins manage users and assign provider roles, while providers manage their own food items and orders. The system uses a modular architecture built with Node.js, Express, TypeScript, and Better Auth for secure authentication and role-based access control.
 
+
+## Video 
+https://youtu.be/cucXtUwvNOo 
 ---
 
 ## 🚀 Features
