@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { auth } from "../../lib/auth";
+import { auth } from "../../lib/auth.js";
 
 // ============================| SIGN-UP |==========================================
 const registerController = async (req: Request, res: Response) => {
@@ -36,7 +36,6 @@ const signInController = async (req: Request, res: Response) => {
       headers: req.headers as any,
       asResponse: true,
     });
-
     // 1. Manually extract the 'Set-Cookie' header
     const setCookie = data.headers.get("set-cookie");
 

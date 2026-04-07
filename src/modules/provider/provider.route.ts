@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { providerApi } from "./provider.controller";
+import { providerApi } from "./provider.controller.js";
 
 const providerRoute = Router();
 
@@ -12,7 +12,7 @@ providerRoute.patch("/orders/:id", providerApi.updateOrderStatus);
 providerRoute.get("/orders/", providerApi.getProviderOrders);
 providerRoute.get("/meals", providerApi.getAllMeals);
 
-export default providerRoute;
+export default providerRoute; 
 
 {
   // ! Provider APIs

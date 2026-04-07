@@ -10,7 +10,7 @@ declare global {
   }
 }
 import { Request, Response, NextFunction } from "express";
-import { RoleType } from "../lib/constants";
+import { RoleType } from "../lib/constants.js";
 
 export const requireRoles = (allowedRoles: RoleType[]) => {
   return (req: Request, res: Response, next: NextFunction) => {

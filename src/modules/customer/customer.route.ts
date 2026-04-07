@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { customerAPis } from "./customer.controller";
+import { customerAPis } from "./customer.controller.js";
 
 const customerRoute = Router();
 customerRoute.get("/meals", customerAPis.getAllMeal);

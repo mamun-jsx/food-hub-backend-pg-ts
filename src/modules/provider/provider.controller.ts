@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { prisma } from "../../lib/prisma";
+import { prisma } from "../../lib/prisma.js";
 // ! Provider APIs
 // PATCH /api/provider/orders/:id → update order status //* NEED TO MAKE IT
 // create provider information
@@ -198,7 +198,7 @@ const updateOrderStatus = async (req: Request, res: Response) => {
     });
   }
 };
-// get provider order 
+// get provider order
 const getProviderOrders = async (req: Request, res: Response) => {
   try {
     if (!req.user) {
@@ -256,7 +256,7 @@ const getProviderOrders = async (req: Request, res: Response) => {
     });
   }
 };
-// get provider meal 
+// get provider meal
 export const getAllMeals = async (req: Request, res: Response) => {
   try {
     if (!req.user) {
@@ -289,9 +289,9 @@ export const getAllMeals = async (req: Request, res: Response) => {
         id: true,
         name: true,
         image: true,
-        price:true,
-        description:true,
-        category:true
+        price: true,
+        description: true,
+        category: true,
       },
     });
 
@@ -307,7 +307,7 @@ export const getAllMeals = async (req: Request, res: Response) => {
     });
   }
 };
-// update provider profile 
+// update provider profile
 const updateProviderProfile = async (req: Request, res: Response) => {
   try {
     const { restaurantName, description, address, phone } = req.body;
@@ -364,5 +364,5 @@ export const providerApi = {
   updateOrderStatus,
   getProviderOrders,
   getAllMeals,
-  updateProviderProfile
+  updateProviderProfile,
 };

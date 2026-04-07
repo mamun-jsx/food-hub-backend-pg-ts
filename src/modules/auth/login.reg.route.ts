@@ -1,5 +1,5 @@
 import express from "express";
-import { LoginRegistrationFunction } from "./login.reg.controller";
+import { LoginRegistrationFunction } from "./login.reg.controller.js";
 
 const loginRoute = express.Router();
 
