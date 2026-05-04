@@ -1,78 +1,33 @@
 import { Request, Response } from "express";
-import { prisma } from "../../lib/prisma.js";
-// get all user
+import { AdminService } from "./admin.service.js";
+
 const getAllUser = async (req: Request, res: Response) => {
   try {
-    if (!req.user) {
-      return res
-        .status(401)
-        .json({ success: false, message: "You are not login" });
-    }
-    const users = await prisma.user.findMany();
-
-    return res.status(200).json({
-      success: true,
-      data: users,
-    });
+    const users = await AdminService.getAllUsers();
+    return res.status(200).json({ success: true, data: users });
   } catch (error: any) {
-    console.error("Error fetching users:", error);
-
-    return res.status(500).json({
-      success: false,
-      message: "Internal Server Error",
-      details: error.message || error,
-    });
+    return res.status(500).json({ success: false, message: "Error fetching users" });
   }
 };
-// update user
+
 const updateUser = async (req: Request, res: Response) => {
   try {
-    const userId = req.params.id as string;
-    const { role } = req.body;
-    const updateUser = await prisma.user.update({
-      where: { id: userId },
-      data: { role },
-    });
-
-    res.status(200).json({ success: true, user: updateUser });
+    const updatedUser = await AdminService.updateUserRole(req.params.id as string, req.body.role);
+    return res.status(200).json({ success: true, user: updatedUser });
   } catch (error: any) {
-    if (error.code === "P2025") {
-      return res.status(404).json({
-        success: false,
-        message: "User not found",
-      });
-    }
-
-    res.status(500).json({
-      success: false,
-      message: "Server error",
-    });
+    return res.status(500).json({ success: false, message: "Error updating user" });
   }
 };
 
-//  view all order
 const adminOrderView = async (req: Request, res: Response) => {
   try {
-    const orderData = await prisma.order.findMany({
-      include: {
-        items: {
-          include: {
-            meal: true,
-          },
-        },
-      },
-    });
-    if (orderData.length === 0) {
-      return res
-        .status(404)
-        .json({ success: true, message: "No order placed yet" });
+    const orders = await AdminService.getAllOrders();
+    if (orders.length === 0) {
+      return res.status(404).json({ success: true, message: "No order placed yet", data: [] });
     }
-    return res.status(200).json({ success: true, data: orderData });
+    return res.status(200).json({ success: true, data: orders });
   } catch (error) {
-    return res.status(500).json({
-      success: false,
-      message: "Server error",
-    });
+    return res.status(500).json({ success: false, message: "Error fetching orders" });
   }
 };
 

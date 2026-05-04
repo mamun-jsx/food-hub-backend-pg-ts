@@ -1,20 +1,22 @@
-import { User, Session } from "better-auth";
+import { Request, Response, NextFunction } from "express";
+import { RoleType } from "../lib/constants.js";
 
 declare global {
   namespace Express {
     interface Request {
-      // This tells TypeScript that 'user' and 'session' exist on req
-      user?: User & { role: string };
-      session?: Session;
+      user?: {
+        id: string;
+        email: string;
+        role: string;
+        name?: string;
+        image?: string;
+      };
     }
   }
 }
-import { Request, Response, NextFunction } from "express";
-import { RoleType } from "../lib/constants.js";
 
 export const requireRoles = (allowedRoles: RoleType[]) => {
   return (req: Request, res: Response, next: NextFunction) => {
-    // req.user is populated by the 'setUser' middleware above
     if (!req.user) {
       return res.status(401).json({
         success: false,
@@ -22,7 +24,6 @@ export const requireRoles = (allowedRoles: RoleType[]) => {
       });
     }
 
-    // Since you added 'role' to Better Auth additionalFields, it's available here
     const userRole = req.user.role as RoleType;
 
     if (!allowedRoles.includes(userRole)) {

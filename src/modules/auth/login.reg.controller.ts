@@ -1,58 +1,32 @@
 import { Request, Response } from "express";
-import { auth } from "../../lib/auth.js";
+import { AuthService } from "./auth.service.js";
 
-// ============================| SIGN-UP |==========================================
 const registerController = async (req: Request, res: Response) => {
   try {
-    const { name, email, password, image } = req.body;
-
-    const data = await auth.api.signUpEmail({
-      body: { name, email, password, image },
-      headers: req.headers as any,
-    });
-
+    const result = await AuthService.register(req.body);
     return res.status(201).json({
       success: true,
-      data,
+      message: "User registered successfully",
+      ...result,
     });
   } catch (error: any) {
-    const status =
-      typeof error.statusCode === "number" ? error.statusCode : 500;
-    return res.status(status).json({
+    return res.status(400).json({
       success: false,
       message: error.message || "Registration failed",
     });
   }
 };
 
-// ============================|LOGIN |==========================================
 const signInController = async (req: Request, res: Response) => {
   try {
-    const { email, password } = req.body;
-
-    // Use 'asResponse: true' to get the full response object including headers
-    const data = await auth.api.signInEmail({
-      body: { email, password, rememberMe: true },
-      headers: req.headers as any,
-      asResponse: true,
-    });
-    // 1. Manually extract the 'Set-Cookie' header
-    const setCookie = data.headers.get("set-cookie");
-
-    if (setCookie) {
-      // 2. Set it on your Express response
-      res.setHeader("Set-Cookie", setCookie);
-    }
-
-    // 3. Convert the Better Auth response to JSON to send back to client
-    const user = await data.json();
-
+    const result = await AuthService.login(req.body);
     return res.status(200).json({
       success: true,
-      user,
+      message: "Login successful",
+      ...result,
     });
   } catch (error: any) {
-    return res.status(error.statusCode || 500).json({
+    return res.status(401).json({
       success: false,
       message: error.message || "Login failed",
     });
@@ -60,20 +34,14 @@ const signInController = async (req: Request, res: Response) => {
 };
 
 const louOut = async (req: Request, res: Response) => {
-  try {
-    await auth.api.signOut({
-      headers: req.headers as any,
-    });
-    return res
-      .status(200)
-      .json({ success: true, message: "Logged out successfully" });
-  } catch (error) {
-    console.log(error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal Server Error" });
-  }
+  // With JWT, logout is usually handled by the client by deleting the token.
+  // We can just return success.
+  return res.status(200).json({
+    success: true,
+    message: "Logged out successfully (please clear your token on client side)",
+  });
 };
+
 export const LoginRegistrationFunction = {
   signInController,
   registerController,
