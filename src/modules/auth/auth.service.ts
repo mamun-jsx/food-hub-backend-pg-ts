@@ -24,12 +24,17 @@ const register = async (userData: any) => {
       email,
       password: hashedPassword,
       image,
-      role: "CUSTOMER", // Default role
     },
   });
 
   // Generate token
-  const token = signToken({ id: user.id, email: user.email, role: user.role });
+  const token = signToken({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    name: user.name,
+    image: user.image,
+  });
 
   return {
     user: {
@@ -63,7 +68,13 @@ const login = async (credentials: any) => {
   }
 
   // Generate token
-  const token = signToken({ id: user.id, email: user.email, role: user.role });
+  const token = signToken({
+    id: user.id,
+    email: user.email,
+    role: user.role,
+    name: user.name,
+    image: user.image,
+  });
 
   return {
     user: {

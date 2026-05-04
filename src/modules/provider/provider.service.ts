@@ -30,15 +30,24 @@ const addMeal = async (userId: string, mealData: any) => {
     data: {
       ...mealData,
       price: Number(mealData.price),
+      cookingTime: Number(mealData.cookingTime || 0),
+      deliveryTime: Number(mealData.deliveryTime || 0),
       providerId: providerProfile.id,
     },
   });
 };
 
 const updateMeal = async (mealId: string, mealData: any) => {
+  const updatedData = { ...mealData };
+  if (mealData.price) updatedData.price = Number(mealData.price);
+  if (mealData.cookingTime)
+    updatedData.cookingTime = Number(mealData.cookingTime);
+  if (mealData.deliveryTime)
+    updatedData.deliveryTime = Number(mealData.deliveryTime);
+
   return await prisma.meal.update({
     where: { id: mealId },
-    data: mealData,
+    data: updatedData,
   });
 };
 
@@ -104,6 +113,8 @@ const getAllMeals = async (userId: string) => {
       price: true,
       description: true,
       category: true,
+      cookingTime: true,
+      deliveryTime: true,
     },
   });
 };
