@@ -83,6 +83,15 @@ const updateProviderProfile = async (req: Request, res: Response) => {
   }
 };
 
+const getProviderProfile = async (req: Request, res: Response) => {
+  try {
+    const profile = await ProviderService.getProviderProfile(req.user!.id);
+    return res.status(200).json({ success: true, profile });
+  } catch (error: any) {
+    return res.status(400).json({ success: false, message: error.message || "Error fetching profile" });
+  }
+};
+
 export const providerApi = {
   addMeals,
   updateMeal,
@@ -92,4 +101,5 @@ export const providerApi = {
   getProviderOrders,
   getAllMeals,
   updateProviderProfile,
+  getProviderProfile,
 };

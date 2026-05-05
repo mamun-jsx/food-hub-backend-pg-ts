@@ -20,8 +20,6 @@ routes.get("/", (req, res) => {
 routes.use(loginRoute);
 
 // ---------------- Protected Customer Routes ----------------
-// user must be logged in to access customer APIs
-// routes.use("/api", setUser, customerRoute);
 routes.use("/api", setUser, customerRoute);
 
 // ---------------- Admin Routes ----------------

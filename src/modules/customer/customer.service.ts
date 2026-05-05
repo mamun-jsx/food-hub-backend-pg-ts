@@ -183,6 +183,19 @@ const updateUserProfile = async (userId: string, data: { name?: string; image?: 
   });
 };
 
+const getUserProfile = async (userId: string) => {
+  return await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      name: true,
+      email: true,
+      role: true,
+      image: true,
+    },
+  });
+};
+
 export const CustomerService = {
   getAllMeals,
   getMealById,
@@ -194,4 +207,5 @@ export const CustomerService = {
   createReview,
   getProviderById,
   updateUserProfile,
+  getUserProfile,
 };

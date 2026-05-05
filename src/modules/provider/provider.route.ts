@@ -11,6 +11,7 @@ providerRoute.put("/profile", providerApi.updateProviderProfile);
 providerRoute.patch("/orders/:id", providerApi.updateOrderStatus);
 providerRoute.get("/orders/", providerApi.getProviderOrders);
 providerRoute.get("/meals", providerApi.getAllMeals);
+providerRoute.get("/profile", providerApi.getProviderProfile);
 
 export default providerRoute; 
 
