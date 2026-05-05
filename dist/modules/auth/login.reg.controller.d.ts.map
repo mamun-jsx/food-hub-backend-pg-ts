@@ -1,0 +1,1 @@
+{"version":3,"file":"login.reg.controller.d.ts","sourceRoot":"","sources":["../../../src/modules/auth/login.reg.controller.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,QAAQ,EAAE,MAAM,SAAS,CAAC;AA4C5C,eAAO,MAAM,yBAAyB;4BAzBD,OAAO,OAAO,QAAQ;8BAhBpB,OAAO,OAAO,QAAQ;kBAgClC,OAAO,OAAO,QAAQ;CAahD,CAAC"}

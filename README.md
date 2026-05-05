@@ -1,97 +1,87 @@
-# Food Hub Backend
+# FoodHub Backend 🍳
 
-A robust and clean backend for the Food Hub application, built with **Express**, **Prisma**, **PostgreSQL**, and **TypeScript**.
+A powerful, role-based backend API for the FoodHub ecosystem, built with high-performance technologies to handle seamless food ordering, provider management, and administrative control.
 
-## Features
+## 🚀 Technologies
 
-- **JWT Authentication**: Custom implementation using `jsonwebtoken` and `bcryptjs`.
-- **Role-Based Access Control (RBAC)**: Supports `ADMIN`, `PROVIDER`, and `CUSTOMER` roles.
-- **Service Layer Architecture**: Business logic is separated into services for better maintainability and testing.
-- **Prisma ORM**: Type-safe database queries with a PostgreSQL backend (NeonDB).
-- **Modern TypeScript**: Built with TypeScript ES2023 and NodeNext module resolution.
+- **Runtime**: Node.js
+- **Language**: TypeScript
+- **Framework**: Express.js
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **Security**: JWT (JSON Web Tokens), Bcrypt.js
+- **Validation**: Custom Middleware
 
-## Project Structure
+## 📂 Core Modules
 
-```text
-src/
-├── generated/      # Auto-generated Prisma client
-├── lib/            # Utilities (JWT, Prisma client, constants)
-├── middlewear/     # Express middleware (Auth, Roles)
-├── modules/        # Feature modules (Auth, Customer, Provider, Admin)
-│   ├── auth/       # Registration and Login
-│   ├── customer/   # Customer APIs (Meals, Orders, Reviews)
-│   ├── provider/   # Provider APIs (Meal management, Profile)
-│   └── admin/      # Admin APIs (User/Order management)
-├── Router/         # Main router configuration
-├── app.ts          # Express app configuration
-└── server.ts       # Entry point
+- **Auth**: Secure registration and login for Users, Providers, and Admins.
+- **Customer**: Public meal browsing, order placement, profile management, and reviews.
+- **Provider**: Professional tools to manage restaurant profiles, meal listings, and incoming order statuses.
+- **Admin**: Complete platform control including user management and global order monitoring.
+
+## ⚙️ Key Features
+
+- **Role-Based Access Control (RBAC)**: Fine-grained permissions for Customer, Provider, and Admin roles.
+- **Prisma Integration**: Type-safe database queries with a scalable PostgreSQL schema.
+- **JWT Authentication**: Stateless authentication with custom `setUser` middleware for request context.
+- **Order Flow**: Automated order processing from placement to delivery status updates.
+- **Provider Profiling**: Dedicated logic for merchants to build and update their culinary identity.
+
+## 🛠️ Setup Instructions
+
+### 1. Prerequisites
+- Node.js (v18+)
+- PostgreSQL instance (local or hosted)
+
+### 2. Installation
+```bash
+npm install
 ```
 
-## Getting Started
+### 3. Environment Variables
+Create a `.env` file in the root directory:
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/foodhub"
+JWT_SECRET="your_ultra_secure_secret"
+PORT=4000
+```
 
-### Prerequisites
+### 4. Database Setup
+```bash
+npx prisma generate
+npx prisma db push
+```
 
-- Node.js (v18 or higher)
-- PostgreSQL database (e.g., NeonDB)
+### 5. Running the Server
+```bash
+# Development mode
+npm run dev
 
-### Installation
+# Production build
+npm run build
+npm start
+```
 
-1. Clone the repository.
-2. Install dependencies:
-   ```bash
-   npm install
-   ```
-3. Set up your environment variables in a `.env` file:
-   ```env
-   PORT=4000
-   DATABASE_URL="your_postgresql_connection_string"
-   JWT_SECRET="your_secure_jwt_secret"
-   JWT_EXPIRES_IN="7d"
-   FRONTEND_URL="http://localhost:3000"
-   ```
-4. Generate the Prisma client:
-   ```bash
-   npx prisma generate
-   ```
+## 📍 API Endpoints (Quick Reference)
 
-### Running the App
+### Auth
+- `POST /login` - User authentication
+- `POST /register` - New user creation
 
-- **Development**:
-  ```bash
-  npm run dev
-  ```
-- **Production**:
-  ```bash
-  npm run build
-  ```
-
-## Authentication
-
-The backend uses JWT for authentication. 
-- **Header**: `Authorization: Bearer <your_jwt_token>`
-- **Endpoints**:
-    - `POST /api/auth/register`: Register a new user (default role: `CUSTOMER`).
-    - `POST /api/auth/login`: Login and receive a JWT.
-    - `POST /api/auth/logout`: Logout (client-side token removal).
-
-## API Modules
-
-### Customer
-- `GET /api/meals`: List all meals (with search/filter).
-- `POST /api/orders`: Place a new order.
-- `GET /api/orders`: Get logged-in user's orders.
-- `POST /api/reviews`: Submit a meal review.
+### Customer (Public/Protected)
+- `GET /api/meals` - Get all meals
+- `GET /api/providers/:id` - Get provider with menu
+- `POST /api/orders` - Place a new order
+- `GET /api/profile` - Get current user profile
 
 ### Provider
-- `POST /api/provider/meals`: Add a new meal to your menu.
-- `GET /api/provider/orders`: View orders for your meals.
-- `PATCH /api/provider/orders/:id`: Update order status.
+- `GET /api/provider/meals` - View all owned meals
+- `POST /api/provider/profile` - Create/Update restaurant profile
+- `PATCH /api/provider/orders/:id` - Update order status
 
 ### Admin
-- `GET /api/admin/users`: List all users.
-- `PATCH /api/admin/users/:id`: Update user roles.
-- `GET /api/admin/orders`: View all platform orders.
+- `GET /api/admin/users` - View all users
+- `GET /api/admin/orders` - Monitor all platform orders
 
-## License
-
-This project is licensed under the MIT License.
+---
+Developed by **Abdullah Al Mamun**
