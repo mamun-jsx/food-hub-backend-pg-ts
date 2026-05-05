@@ -2,6 +2,13 @@
 
 A powerful, role-based backend API for the FoodHub ecosystem, built with high-performance technologies to handle seamless food ordering, provider management, and administrative control.
 
+## 🔗 Quick Links
+
+- **Live API**: [https://food-hub-backend-pg-ts.vercel.app](https://food-hub-backend-pg-ts.vercel.app)
+- **Frontend Live**: [https://food-hub-frontend-tan.vercel.app](https://food-hub-frontend-tan.vercel.app)
+- **Frontend Repository**: [https://github.com/mamun-jsx/food-hub-frontend](https://github.com/mamun-jsx/food-hub-frontend)
+
+
 ## 🚀 Technologies
 
 - **Runtime**: Node.js
