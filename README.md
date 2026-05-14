@@ -1,44 +1,43 @@
 # FoodHub Backend 🍳
 
-A powerful, role-based backend API for the FoodHub ecosystem, built with high-performance technologies to handle seamless food ordering, provider management, and administrative control.
+A powerful, role-based RESTful API for the FoodHub ecosystem. Engineered for high performance and security to handle complex food ordering workflows, provider management, and administrative control.
 
 ## 🔗 Quick Links
 
 - **Live API**: [https://food-hub-backend-pg-ts.vercel.app](https://food-hub-backend-pg-ts.vercel.app)
-- **Frontend Live**: [https://food-hub-frontend-tan.vercel.app](https://food-hub-frontend-tan.vercel.app)
-- **Frontend Repository**: [https://github.com/mamun-jsx/food-hub-frontend](https://github.com/mamun-jsx/food-hub-frontend)
-
+- **Frontend Code Repo**: [https://github.com/mamun-jsx/food-hub-frontend](https://github.com/mamun-jsx/food-hub-frontend)
+- **Frontend Live Site**: [https://food-hub-frontend-tan.vercel.app](https://food-hub-frontend-tan.vercel.app)
 
 ## 🚀 Technologies
 
 - **Runtime**: Node.js
 - **Language**: TypeScript
 - **Framework**: Express.js
-- **Database**: PostgreSQL
-- **ORM**: Prisma
-- **Security**: JWT (JSON Web Tokens), Bcrypt.js
-- **Validation**: Custom Middleware
+- **Database**: PostgreSQL (Relational Data Persistence)
+- **ORM**: Prisma (Type-safe Database Access)
+- **Security**: JWT (JSON Web Tokens), Bcrypt.js (Password Hashing)
+- **Middleware**: Custom Auth, Error Handling, and Role-Based Access Control
+
+## ✨ Key Features
+
+- **Role-Based Access Control (RBAC)**: Secure multi-tier access for Customers, Providers, and Administrators.
+- **Verified Review Engine**: Sophisticated logic that only permits reviews from users who have successfully received a "DELIVERED" order for the specific meal.
+- **Scalable Meal Management**: Full CRUD capabilities for providers with optimized category and search indexing.
+- **Dynamic Order Processing**: Real-time status updates (PLACED → PREPARING → READY → DELIVERED) with transactional integrity.
+- **Profile Synchronization**: Centralized user and merchant profiling with image URL support and secure field updates.
 
 ## 📂 Core Modules
 
-- **Auth**: Secure registration and login for Users, Providers, and Admins.
-- **Customer**: Public meal browsing, order placement, profile management, and reviews.
-- **Provider**: Professional tools to manage restaurant profiles, meal listings, and incoming order statuses.
-- **Admin**: Complete platform control including user management and global order monitoring.
-
-## ⚙️ Key Features
-
-- **Role-Based Access Control (RBAC)**: Fine-grained permissions for Customer, Provider, and Admin roles.
-- **Prisma Integration**: Type-safe database queries with a scalable PostgreSQL schema.
-- **JWT Authentication**: Stateless authentication with custom `setUser` middleware for request context.
-- **Order Flow**: Automated order processing from placement to delivery status updates.
-- **Provider Profiling**: Dedicated logic for merchants to build and update their culinary identity.
+- **Auth**: Secure JWT-based registration and login flows.
+- **Customer**: Browsing, ordering, and review management.
+- **Provider**: Restaurant identity management and menu oversight.
+- **Admin**: Platform-wide monitoring of users and orders.
 
 ## 🛠️ Setup Instructions
 
 ### 1. Prerequisites
 - Node.js (v18+)
-- PostgreSQL instance (local or hosted)
+- PostgreSQL (Local or Hosted instance)
 
 ### 2. Installation
 ```bash
@@ -49,11 +48,11 @@ npm install
 Create a `.env` file in the root directory:
 ```env
 DATABASE_URL="postgresql://user:password@localhost:5432/foodhub"
-JWT_SECRET="your_ultra_secure_secret"
+JWT_SECRET="your_secure_jwt_secret"
 PORT=4000
 ```
 
-### 4. Database Setup
+### 4. Database Initialization
 ```bash
 npx prisma generate
 npx prisma db push
@@ -61,34 +60,21 @@ npx prisma db push
 
 ### 5. Running the Server
 ```bash
-# Development mode
+# Development
 npm run dev
 
-# Production build
+# Production
 npm run build
 npm start
 ```
 
-## 📍 API Endpoints (Quick Reference)
+## 📍 API Reference (Key Endpoints)
 
-### Auth
-- `POST /login` - User authentication
-- `POST /register` - New user creation
-
-### Customer (Public/Protected)
-- `GET /api/meals` - Get all meals
-- `GET /api/providers/:id` - Get provider with menu
-- `POST /api/orders` - Place a new order
-- `GET /api/profile` - Get current user profile
-
-### Provider
-- `GET /api/provider/meals` - View all owned meals
-- `POST /api/provider/profile` - Create/Update restaurant profile
-- `PATCH /api/provider/orders/:id` - Update order status
-
-### Admin
-- `GET /api/admin/users` - View all users
-- `GET /api/admin/orders` - Monitor all platform orders
+- `POST /api/register` & `POST /api/login`: Authentication.
+- `GET /api/meals`: List all meals with search/filter support.
+- `PATCH /api/profile-update`: Securely update user name and image.
+- `POST /api/reviews`: Submit verified reviews for delivered orders.
+- `PATCH /api/provider/orders/:id`: Update order status (Merchant only).
 
 ---
-Developed by **Abdullah Al Mamun**
+Developed by **[Abdullah Al Mamun](https://github.com/mamun-jsx)**
