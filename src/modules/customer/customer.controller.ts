@@ -3,11 +3,26 @@ import { CustomerService } from "./customer.service.js";
 
 const getAllMeal = async (req: Request, res: Response) => {
   try {
-    const { search, category } = req.query;
-    const meals = await CustomerService.getAllMeals(search as string, category as string);
+    const { search, category, sortBy, sortOrder, page, limit } = req.query;
+    
+    const pageNum = parseInt(page as string) || 1;
+    const limitNum = parseInt(limit as string) || 10;
+
+    const { meals, totalCount } = await CustomerService.getAllMeals(
+      search as string,
+      category as string,
+      sortBy as string,
+      sortOrder as "asc" | "desc",
+      pageNum,
+      limitNum
+    );
+
     return res.status(200).json({
       success: true,
       numberOfItems: meals.length,
+      totalItems: totalCount,
+      totalPages: Math.ceil(totalCount / limitNum),
+      currentPage: pageNum,
       meal: meals,
     });
   } catch (error) {

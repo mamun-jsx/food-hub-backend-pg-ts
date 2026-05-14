@@ -1,43 +1,70 @@
 import { prisma } from "../../lib/prisma.js";
 
-const getAllMeals = async (search?: string, category?: string) => {
-  return await prisma.meal.findMany({
-    where: {
-      AND: [
-        search
-          ? {
-              name: {
-                contains: search,
-                mode: "insensitive",
+const getAllMeals = async (
+  search?: string,
+  category?: string,
+  sortBy: string = "createdAt",
+  sortOrder: "asc" | "desc" = "desc",
+  page: number = 1,
+  limit: number = 10,
+) => {
+  const skip = (page - 1) * limit;
+  const take = limit;
+
+  // Validate sortBy field. Default to 'name' if invalid or if 'createdAt' is requested (Meal doesn't have createdAt)
+  const validSortFields = ["name", "price", "category"];
+  const finalSortBy = validSortFields.includes(sortBy) ? sortBy : "name";
+  const finalSortOrder = sortOrder === "asc" || sortOrder === "desc" ? sortOrder : "desc";
+
+  const where = {
+    AND: [
+      search
+        ? {
+            name: {
+              contains: search,
+              mode: "insensitive" as const,
+            },
+          }
+        : {},
+      category
+        ? {
+            category: {
+              equals: category,
+              mode: "insensitive" as const,
+            },
+          }
+        : {},
+    ],
+  };
+
+  const [meals, totalCount] = await Promise.all([
+    prisma.meal.findMany({
+      where,
+      skip,
+      take,
+      orderBy: {
+        [finalSortBy]: finalSortOrder,
+      },
+      include: {
+        reviews: {
+          select: {
+            rating: true,
+            comment: true,
+            createdAt: true,
+            user: {
+              select: {
+                name: true,
+                image: true,
               },
-            }
-          : {},
-        category
-          ? {
-              category: {
-                equals: category,
-                mode: "insensitive",
-              },
-            }
-          : {},
-      ],
-    },
-    include: {
-      reviews: {
-        select: {
-          rating: true,
-          comment: true,
-          createdAt: true,
-          user: {
-            select: {
-              name: true,
-              image: true,
             },
           },
         },
       },
-    },
-  });
+    }),
+    prisma.meal.count({ where }),
+  ]);
+
+  return { meals, totalCount };
 };
 
 const getMealById = async (mealId: string) => {
